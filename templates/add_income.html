@@ -1,0 +1,140 @@
+{% extends "app_shell.html" %}
+{% set active_page = 'income' %}
+{% block title %}Income Entry - Fiscal Architect{% endblock %}
+
+{% block content %}
+<!-- Breadcrumbs & Heading -->
+<div class="mb-10">
+    <div class="flex items-center gap-2 text-sm text-slate-400 mb-2">
+        <a href="{{ url_for('dashboard') }}" class="hover:text-slate-600 transition-colors">Dashboard</a>
+        <span class="material-symbols-outlined text-xs">chevron_right</span>
+        <span class="text-indigo-600 font-medium">Income Entry</span>
+    </div>
+    <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight">New Income Entry</h2>
+    <p class="text-slate-500 mt-1">Record a new revenue stream for the Fiscal Year 2024.</p>
+</div>
+
+<div class="grid grid-cols-12 gap-8">
+    <!-- Form -->
+    <div class="col-span-12 lg:col-span-8">
+        <div class="bg-surface-container-lowest rounded-xl p-8 shadow-xl shadow-slate-900/5">
+            <form class="space-y-8" method="POST" action="{{ url_for('add_income') }}">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+
+                <!-- Amount & Date -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-semibold text-on-surface-variant mb-2 px-1">Amount (USD)</label>
+                        <div class="relative">
+                            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-medium">$</span>
+                            <input name="amount" class="w-full pl-10 pr-4 py-4 bg-surface-container-low border-none rounded-xl focus:ring-2 focus:ring-primary text-lg font-bold text-indigo-900" placeholder="0.00" step="0.01" type="number" required/>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-on-surface-variant mb-2 px-1">Transaction Date</label>
+                        <div class="relative">
+                            <input name="date" class="w-full pl-4 pr-12 py-4 bg-surface-container-low border-none rounded-xl focus:ring-2 focus:ring-primary text-on-surface" type="date"/>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Category & Received From -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-semibold text-on-surface-variant mb-2 px-1">Source / Category</label>
+                        <select name="category" class="w-full px-4 py-4 bg-surface-container-low border-none rounded-xl focus:ring-2 focus:ring-primary text-on-surface appearance-none">
+                            <option>Course Fees</option>
+                            <option>Corporate Training</option>
+                            <option>Consulting</option>
+                            <option>Sponsorships</option>
+                            <option>Merchandise</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-on-surface-variant mb-2 px-1">Received From</label>
+                        <input name="received_from" class="w-full px-4 py-4 bg-surface-container-low border-none rounded-xl focus:ring-2 focus:ring-primary text-on-surface" placeholder="Company or Individual Name" type="text"/>
+                    </div>
+                </div>
+
+                <!-- Payer Details -->
+                <div>
+                    <label class="block text-sm font-semibold text-on-surface-variant mb-2 px-1">Payer Details (Optional)</label>
+                    <input name="payer_details" class="w-full px-4 py-4 bg-surface-container-low border-none rounded-xl focus:ring-2 focus:ring-primary text-on-surface" placeholder="Tax ID, Contact Email, or Address" type="text"/>
+                </div>
+
+                <!-- Description -->
+                <div>
+                    <label class="block text-sm font-semibold text-on-surface-variant mb-2 px-1">Description / Project Details</label>
+                    <textarea name="description" class="w-full px-4 py-4 bg-surface-container-low border-none rounded-xl focus:ring-2 focus:ring-primary text-on-surface" placeholder="Detailed breakdown of the income source..." rows="4"></textarea>
+                </div>
+
+                <!-- Actions -->
+                <div class="pt-6 border-t border-slate-100 flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600">
+                            <span class="material-symbols-outlined">person</span>
+                        </div>
+                        <div>
+                            <label class="block text-[10px] uppercase tracking-wider font-bold text-slate-400">Entry By</label>
+                            <p class="text-sm font-semibold text-slate-700">{{ current_user.full_name or current_user.username }}</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-4">
+                        <a href="{{ url_for('dashboard') }}" class="px-8 py-4 text-slate-500 font-bold hover:text-slate-700 transition-colors">Discard</a>
+                        <button class="px-10 py-4 bg-gradient-to-r from-primary to-primary-container text-white font-bold rounded-xl shadow-lg shadow-indigo-200 active:scale-95 transition-all btn-press" type="submit">Submit Income</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="col-span-12 lg:col-span-4 space-y-6">
+        <!-- Monthly Target -->
+        <div class="bg-surface-container-low rounded-xl p-6">
+            <h3 class="font-headline font-bold text-indigo-900 mb-4 flex items-center gap-2">
+                <span class="material-symbols-outlined text-indigo-600">analytics</span>
+                Monthly Target
+            </h3>
+            <div class="space-y-4">
+                <div class="flex justify-between text-sm">
+                    <span class="text-slate-500">Collected</span>
+                    <span class="font-bold text-slate-900">${{ '{:,.2f}'.format(total_collected) }}</span>
+                </div>
+                <div class="w-full h-3 bg-white rounded-full overflow-hidden">
+                    <div class="h-full bg-primary rounded-full" style="width: {{ goal_pct }}%"></div>
+                </div>
+                <p class="text-xs text-slate-400 italic">{{ goal_pct }}% of your ${{ '{:,.2f}'.format(goal) }} goal achieved.</p>
+            </div>
+        </div>
+
+        <!-- Last Entry -->
+        <div class="bg-surface-container-lowest rounded-xl p-6 shadow-xl shadow-slate-900/5">
+            <h3 class="font-headline font-bold text-slate-900 mb-4">Last Entry</h3>
+            {% if last_entry %}
+            <div class="flex items-start gap-4">
+                <div class="p-3 bg-tertiary-container/10 rounded-xl text-on-tertiary-container">
+                    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                </div>
+                <div>
+                    <p class="text-sm font-bold text-slate-900">${{ '{:,.2f}'.format(last_entry.amount) }}</p>
+                    <p class="text-xs text-slate-500">{{ last_entry.category_name }} - {{ last_entry.entity_name }}</p>
+                    <p class="text-[10px] text-slate-400 mt-1">{{ last_entry.date.strftime('%b %d, %Y') }}</p>
+                </div>
+            </div>
+            {% else %}
+            <p class="text-sm text-slate-400">No income entries yet.</p>
+            {% endif %}
+        </div>
+
+        <!-- Pro Tip -->
+        <div class="p-6 bg-indigo-600 rounded-xl text-white relative overflow-hidden group">
+            <div class="relative z-10">
+                <h3 class="font-bold mb-2">Pro Tip</h3>
+                <p class="text-indigo-100 text-sm leading-relaxed">Ensure all consulting fees include the Project ID in the description for automated reconciliation.</p>
+            </div>
+            <span class="material-symbols-outlined absolute -right-4 -bottom-4 text-white/10 text-8xl rotate-12 transition-transform group-hover:scale-110">lightbulb</span>
+        </div>
+    </div>
+</div>
+{% endblock %}

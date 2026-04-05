@@ -1,0 +1,150 @@
+{% extends "app_shell.html" %}
+{% set active_page = 'dashboard' %}
+{% block title %}Fiscal Architect - Dashboard{% endblock %}
+
+{% block content %}
+<!-- Summary Cards -->
+<section class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
+    <div class="md:col-span-1 bg-surface-container-lowest p-6 rounded-xl shadow-sm relative overflow-hidden group">
+        <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:scale-110 transition-transform">
+            <span class="material-symbols-outlined text-6xl">account_balance_wallet</span>
+        </div>
+        <p class="text-sm text-on-surface-variant font-medium mb-1">Total Balance</p>
+        <h2 class="text-3xl font-extrabold text-on-surface tracking-tight">${{ '{:,.2f}'.format(balance) }}</h2>
+        <div class="mt-4 flex items-center gap-1 text-emerald-600 text-xs font-bold">
+            <span class="material-symbols-outlined text-sm">trending_up</span>
+            <span>+2.4% from last month</span>
+        </div>
+    </div>
+    <div class="md:col-span-1 bg-surface-container-lowest p-6 rounded-xl shadow-sm relative overflow-hidden group">
+        <p class="text-sm text-on-surface-variant font-medium mb-1">Total Income (MTD)</p>
+        <h2 class="text-3xl font-extrabold text-primary tracking-tight">${{ '{:,.2f}'.format(total_income) }}</h2>
+        <div class="mt-4">
+            <a href="{{ url_for('add_income') }}" class="text-xs font-bold px-3 py-1 bg-primary/10 text-primary rounded-full hover:bg-primary/20 transition-colors">Add Income</a>
+        </div>
+    </div>
+    <div class="md:col-span-1 bg-surface-container-lowest p-6 rounded-xl shadow-sm relative overflow-hidden group">
+        <p class="text-sm text-on-surface-variant font-medium mb-1">Total Expenses (MTD)</p>
+        <h2 class="text-3xl font-extrabold text-error tracking-tight">${{ '{:,.2f}'.format(total_expense) }}</h2>
+        <div class="mt-4">
+            <a href="{{ url_for('add_expense') }}" class="text-xs font-bold px-3 py-1 bg-error/10 text-error rounded-full hover:bg-error/20 transition-colors">Add Expense</a>
+        </div>
+    </div>
+    <div class="md:col-span-1 bg-indigo-600 p-6 rounded-xl shadow-lg shadow-indigo-200 relative overflow-hidden">
+        <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-white/10 rounded-full blur-2xl"></div>
+        <p class="text-sm text-indigo-100 font-medium mb-1">Net Savings</p>
+        <h2 class="text-3xl font-extrabold text-white tracking-tight">${{ '{:,.2f}'.format(net_savings) }}</h2>
+        <div class="mt-4">
+            <div class="w-full bg-white/20 rounded-full h-1.5">
+                <div class="bg-white h-1.5 rounded-full" style="width: {{ goal_pct }}%"></div>
+            </div>
+            <p class="text-[10px] text-indigo-100 mt-2 font-medium">{{ goal_pct }}% of monthly goal reached</p>
+        </div>
+    </div>
+</section>
+
+<!-- Charts -->
+<section class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-10">
+    <div class="lg:col-span-2 bg-surface-container-lowest p-8 rounded-xl shadow-sm">
+        <div class="flex items-center justify-between mb-8">
+            <h3 class="font-headline font-bold text-on-surface text-lg">Income vs. Expenses</h3>
+            <div class="flex items-center gap-4 text-xs font-semibold">
+                <div class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-primary"></span><span>Income</span></div>
+                <div class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-error"></span><span>Expenses</span></div>
+            </div>
+        </div>
+        <div class="h-64 flex items-end justify-between gap-2 px-2">
+            {% for h_inc, h_exp in [(40,25),(55,30),(45,35),(75,40),(60,20),(85,50)] %}
+            <div class="flex-grow flex items-end gap-1 group relative h-full">
+                <div class="w-full bg-primary/10 rounded-t-sm group-hover:bg-primary/20 transition-colors" style="height:{{ h_inc }}%"></div>
+                <div class="w-full bg-error/10 rounded-t-sm group-hover:bg-error/20 transition-colors" style="height:{{ h_exp }}%"></div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="mt-4 flex justify-between text-[10px] text-slate-400 font-bold uppercase tracking-wider">
+            <span>Oct 01</span><span>Oct 10</span><span>Oct 20</span><span>Oct 30</span>
+        </div>
+    </div>
+
+    <div class="bg-surface-container-lowest p-8 rounded-xl shadow-sm">
+        <h3 class="font-headline font-bold text-on-surface mb-8 text-lg">Expense Categories</h3>
+        <div class="relative w-48 h-48 mx-auto mb-8">
+            <div class="w-full h-full rounded-full" style="background: conic-gradient(#4f46e5 0% 45%, #735c00 45% 70%, #ba1a1a 70% 90%, #515f74 90% 100%);"></div>
+            <div class="absolute inset-4 bg-white rounded-full flex items-center justify-center">
+                <div class="text-center">
+                    <p class="text-[10px] font-bold text-slate-400 uppercase">Top</p>
+                    <p class="text-xl font-bold text-on-surface">Cloud</p>
+                </div>
+            </div>
+        </div>
+        <div class="space-y-3">
+            <div class="flex items-center justify-between text-xs">
+                <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-primary"></span><span class="font-medium">Infrastructure</span></div>
+                <span class="font-bold">45%</span>
+            </div>
+            <div class="flex items-center justify-between text-xs">
+                <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-tertiary"></span><span class="font-medium">Marketing</span></div>
+                <span class="font-bold">25%</span>
+            </div>
+            <div class="flex items-center justify-between text-xs">
+                <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-error"></span><span class="font-medium">Salaries</span></div>
+                <span class="font-bold">20%</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Transactions Table -->
+<section class="bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden">
+    <div class="p-8 flex items-center justify-between border-b border-surface-container">
+        <h3 class="font-headline font-bold text-on-surface text-lg">Recent Transactions</h3>
+        <button class="text-sm font-bold text-primary flex items-center gap-1 hover:underline">
+            View All <span class="material-symbols-outlined text-sm">chevron_right</span>
+        </button>
+    </div>
+    <div class="overflow-x-auto">
+        <table class="w-full text-left">
+            <thead>
+                <tr class="text-[10px] uppercase tracking-widest text-slate-400 font-bold border-b border-surface-container">
+                    <th class="px-8 py-4">Date</th>
+                    <th class="px-8 py-4">Transaction</th>
+                    <th class="px-8 py-4">Category</th>
+                    <th class="px-8 py-4">Admin</th>
+                    <th class="px-8 py-4 text-right">Amount</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-surface-container">
+                {% for txn in transactions %}
+                <tr class="hover:bg-surface-container-low transition-colors group">
+                    <td class="px-8 py-5 text-sm text-slate-500">{{ txn.date.strftime('%b %d, %Y') }}</td>
+                    <td class="px-8 py-5">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full flex items-center justify-center
+                                {% if txn.type == 'income' %}bg-tertiary-container text-on-tertiary-container{% else %}bg-error-container text-on-error-container{% endif %}">
+                                <span class="material-symbols-outlined text-sm">{% if txn.type == 'income' %}north_east{% else %}south_west{% endif %}</span>
+                            </div>
+                            <div>
+                                <p class="text-sm font-bold text-on-surface">{{ txn.description or txn.entity_name or 'Transaction' }}</p>
+                                <p class="text-[10px] text-slate-400">{{ txn.type|capitalize }}</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-8 py-5">
+                        <span class="px-3 py-1 rounded-full text-[10px] font-bold
+                            {% if txn.type == 'income' %}bg-tertiary-container text-on-tertiary-container{% else %}bg-error-container text-on-error-container{% endif %}">
+                            {{ txn.category_name or txn.type|capitalize }}
+                        </span>
+                    </td>
+                    <td class="px-8 py-5 text-sm text-on-surface-variant font-medium">{{ txn.admin.full_name or txn.admin.username }}</td>
+                    <td class="px-8 py-5 text-right font-bold {% if txn.type == 'income' %}text-primary{% else %}text-error{% endif %}">
+                        {% if txn.type == 'income' %}+{% else %}-{% endif %}${{ '{:,.2f}'.format(txn.amount) }}
+                    </td>
+                </tr>
+                {% else %}
+                <tr><td colspan="5" class="px-8 py-12 text-center text-slate-400">No transactions yet. Add your first income or expense.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}

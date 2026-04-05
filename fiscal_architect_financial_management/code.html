@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Login | Next Skills Academy - Fiscal Architect</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "tertiary-container": "#cea700",
+                        "outline-variant": "#c7c4d8",
+                        "inverse-on-surface": "#ebf1ff",
+                        "on-error": "#ffffff",
+                        "on-tertiary-fixed": "#231b00",
+                        "surface-tint": "#4d44e3",
+                        "background": "#f8f9ff",
+                        "on-secondary-fixed-variant": "#3a485c",
+                        "on-tertiary-fixed-variant": "#574500",
+                        "secondary-container": "#d5e3fd",
+                        "on-primary-fixed": "#0f0069",
+                        "tertiary-fixed-dim": "#eec200",
+                        "primary-fixed-dim": "#c3c0ff",
+                        "on-secondary-container": "#57657b",
+                        "surface-container-low": "#eff4ff",
+                        "surface-container-high": "#dde9ff",
+                        "secondary": "#515f74",
+                        "tertiary": "#735c00",
+                        "secondary-fixed": "#d5e3fd",
+                        "on-surface-variant": "#464555",
+                        "primary": "#3525cd",
+                        "on-background": "#0d1c2f",
+                        "on-tertiary": "#ffffff",
+                        "surface": "#f8f9ff",
+                        "on-error-container": "#93000a",
+                        "secondary-fixed-dim": "#b9c7e0",
+                        "primary-fixed": "#e2dfff",
+                        "surface-container-highest": "#d5e3fd",
+                        "on-surface": "#0d1c2f",
+                        "on-secondary-fixed": "#0d1c2f",
+                        "surface-variant": "#d5e3fd",
+                        "outline": "#777587",
+                        "on-primary": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "error": "#ba1a1a",
+                        "on-tertiary-container": "#4e3e00",
+                        "surface-container": "#e6eeff",
+                        "surface-bright": "#f8f9ff",
+                        "surface-dim": "#ccdbf4",
+                        "on-primary-fixed-variant": "#3323cc",
+                        "on-secondary": "#ffffff",
+                        "tertiary-fixed": "#ffe083",
+                        "primary-container": "#4f46e5",
+                        "inverse-surface": "#233144",
+                        "inverse-primary": "#c3c0ff",
+                        "error-container": "#ffdad6",
+                        "on-primary-container": "#dad7ff"
+                    },
+                    fontFamily: {
+                        "headline": ["Plus Jakarta Sans"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="font-body bg-background text-on-surface min-h-screen flex flex-col">
+<main class="flex-grow flex items-center justify-center p-6 relative overflow-hidden">
+<!-- Abstract Branded Background Elements -->
+<div class="absolute top-[-10%] left-[-5%] w-[40%] h-[40%] rounded-full bg-primary/5 blur-[120px]"></div>
+<div class="absolute bottom-[-10%] right-[-5%] w-[40%] h-[40%] rounded-full bg-secondary-container/20 blur-[100px]"></div>
+<!-- Login Container -->
+<div class="w-full max-w-[440px] relative z-10">
+<!-- Branding/Logo Section -->
+<div class="flex flex-col items-center mb-10">
+<div class="w-20 h-20 mb-6 bg-surface-container-lowest rounded-xl flex items-center justify-center shadow-xl shadow-primary/5 p-2">
+<img alt="Next Skills Academy Logo" class="w-full h-full object-contain rounded-lg" data-alt="Modern professional minimalist logo for Next Skills Academy featuring geometric shapes in deep indigo and white colors" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA1W6QVXLN6s38q4tdN9OcJxcVcCGgibVmTjNlVezyyWhJWRGFmUyP-ylE4enJgcXd2DaEi8NjalIPnO-oGwq9-P8RFzmDuyamygK0YYJAbhJ7hn84z9J6yL29aC3I16yD_zTcK4D1OvLmXInpM5duK7FypipxGS8RDMcMusokhkiB8Gy-X95v7hFujRfPXLvU5Cv9rvzLkLhP9N01QjerxoSAwkN2JNfDfcr4D5r3WVQuG6HFWHtD1e6sxcAgvChI2XgY2y9BNnQ"/>
+</div>
+<h1 class="font-headline text-3xl font-extrabold tracking-tight text-on-surface text-center">
+                    Fiscal Architect
+                </h1>
+<p class="text-on-surface-variant font-medium mt-2 tracking-wide uppercase text-xs">
+                    Operational Excellence
+                </p>
+</div>
+<!-- Login Card -->
+<div class="bg-surface-container-lowest p-8 md:p-10 rounded-xl shadow-2xl shadow-on-surface/5 border border-outline-variant/10">
+<form class="space-y-6" onsubmit="return false;">
+<!-- Email Field -->
+<div class="space-y-2">
+<label class="block font-label text-sm font-semibold text-on-surface-variant ml-1" for="email">
+                            Username or Email
+                        </label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline">
+                                person
+                            </span>
+<input class="w-full pl-12 pr-4 py-4 bg-surface-container-low border-none rounded-lg focus:ring-2 focus:ring-primary focus:bg-surface-container-lowest transition-all placeholder:text-outline" id="email" name="email" placeholder="architect@nextskills.com" type="text"/>
+</div>
+</div>
+<!-- Password Field -->
+<div class="space-y-2">
+<div class="flex justify-between items-center px-1">
+<label class="block font-label text-sm font-semibold text-on-surface-variant" for="password">
+                                Password
+                            </label>
+<a class="text-xs font-semibold text-primary hover:text-primary-container transition-colors" href="#">
+                                Forgot password?
+                            </a>
+</div>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline">
+                                lock
+                            </span>
+<input class="w-full pl-12 pr-12 py-4 bg-surface-container-low border-none rounded-lg focus:ring-2 focus:ring-primary focus:bg-surface-container-lowest transition-all placeholder:text-outline" id="password" name="password" placeholder="••••••••" type="password"/>
+<button class="absolute right-4 top-1/2 -translate-y-1/2 text-outline hover:text-on-surface transition-colors" type="button">
+<span class="material-symbols-outlined">visibility</span>
+</button>
+</div>
+</div>
+<!-- Options -->
+<div class="flex items-center space-x-2 px-1">
+<input class="w-4 h-4 rounded border-outline-variant text-primary focus:ring-primary" id="remember" type="checkbox"/>
+<label class="text-sm text-on-surface-variant font-medium" for="remember">Keep me logged in for 30 days</label>
+</div>
+<!-- CTA Button -->
+<button class="w-full py-4 rounded-full bg-gradient-to-r from-primary to-primary-container text-on-primary font-headline font-bold text-lg shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center space-x-2" type="submit">
+<span>Login</span>
+<span class="material-symbols-outlined text-lg">arrow_forward</span>
+</button>
+</form>
+<!-- Alternative Access -->
+<div class="mt-8 pt-8 border-t border-surface-container text-center">
+<p class="text-on-surface-variant text-sm">
+                        Don't have an account? 
+                        <a class="text-primary font-bold hover:underline underline-offset-4" href="#">Contact Administrator</a>
+</p>
+</div>
+</div>
+<!-- Footnote -->
+<p class="mt-8 text-center text-outline text-xs font-medium">
+                © 2024 Next Skills Academy. The Fiscal Architect.
+            </p>
+</div>
+</main>
+<!-- Footer Mockup from Shared Components (Condensed for Login) -->
+<footer class="w-full py-6 mt-auto flex flex-col md:flex-row justify-between items-center px-8 bg-slate-50 border-t border-slate-100">
+<div class="text-slate-400 font-label text-xs tracking-wide">
+            © 2024 Next Skills Academy. The Fiscal Architect.
+        </div>
+<div class="flex space-x-6 mt-4 md:mt-0">
+<a class="text-slate-400 hover:text-slate-600 text-xs font-medium transition-colors" href="#">Privacy Policy</a>
+<a class="text-slate-400 hover:text-slate-600 text-xs font-medium transition-colors" href="#">Terms of Service</a>
+<a class="text-slate-400 hover:text-slate-600 text-xs font-medium transition-colors" href="#">Support</a>
+</div>
+</footer>
+</body></html>

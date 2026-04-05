@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Income Entry - Fiscal Architect</title>
+<!-- Fonts & Icons -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "tertiary-container": "#cea700",
+              "outline-variant": "#c7c4d8",
+              "inverse-on-surface": "#ebf1ff",
+              "on-error": "#ffffff",
+              "on-tertiary-fixed": "#231b00",
+              "surface-tint": "#4d44e3",
+              "background": "#f8f9ff",
+              "on-secondary-fixed-variant": "#3a485c",
+              "on-tertiary-fixed-variant": "#574500",
+              "secondary-container": "#d5e3fd",
+              "on-primary-fixed": "#0f0069",
+              "tertiary-fixed-dim": "#eec200",
+              "primary-fixed-dim": "#c3c0ff",
+              "on-secondary-container": "#57657b",
+              "surface-container-low": "#eff4ff",
+              "surface-container-high": "#dde9ff",
+              "secondary": "#515f74",
+              "tertiary": "#735c00",
+              "secondary-fixed": "#d5e3fd",
+              "on-surface-variant": "#464555",
+              "primary": "#3525cd",
+              "on-background": "#0d1c2f",
+              "on-tertiary": "#ffffff",
+              "surface": "#f8f9ff",
+              "on-error-container": "#93000a",
+              "secondary-fixed-dim": "#b9c7e0",
+              "primary-fixed": "#e2dfff",
+              "surface-container-highest": "#d5e3fd",
+              "on-surface": "#0d1c2f",
+              "on-secondary-fixed": "#0d1c2f",
+              "surface-variant": "#d5e3fd",
+              "outline": "#777587",
+              "on-primary": "#ffffff",
+              "surface-container-lowest": "#ffffff",
+              "error": "#ba1a1a",
+              "on-tertiary-container": "#4e3e00",
+              "surface-container": "#e6eeff",
+              "surface-bright": "#f8f9ff",
+              "surface-dim": "#ccdbf4",
+              "on-primary-fixed-variant": "#3323cc",
+              "on-secondary": "#ffffff",
+              "tertiary-fixed": "#ffe083",
+              "primary-container": "#4f46e5",
+              "inverse-surface": "#233144",
+              "inverse-primary": "#c3c0ff",
+              "error-container": "#ffdad6",
+              "on-primary-container": "#dad7ff"
+            },
+            fontFamily: {
+              "headline": ["Plus Jakarta Sans"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, .font-headline { font-family: 'Plus Jakarta Sans', sans-serif; }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen">
+<!-- SideNavBar Shell -->
+<aside class="h-screen w-64 fixed left-0 top-0 bg-indigo-50/50 dark:bg-slate-900 flex flex-col py-8 px-4 z-50">
+<div class="flex items-center gap-3 mb-10 px-2">
+<div class="w-10 h-10 bg-primary-container rounded-lg flex items-center justify-center text-on-primary-container">
+<span class="material-symbols-outlined" data-icon="architecture">architecture</span>
+</div>
+<div>
+<h1 class="text-xl font-bold tracking-tight text-indigo-900 dark:text-indigo-100">Fiscal Architect</h1>
+<p class="text-[10px] uppercase tracking-widest text-indigo-600/60 font-bold">Operational Excellence</p>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<!-- Dashboard -->
+<a class="flex items-center gap-3 px-3 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:text-indigo-500 hover:bg-white/50 dark:hover:bg-slate-800 transition-all duration-200 group" href="#">
+<span class="material-symbols-outlined group-active:scale-90" data-icon="dashboard">dashboard</span>
+<span class="font-medium">Dashboard</span>
+</a>
+<!-- Income (Active) -->
+<a class="flex items-center gap-3 px-3 py-3 rounded-xl text-indigo-700 dark:text-indigo-300 font-semibold border-r-4 border-indigo-600 bg-white/50 dark:bg-slate-800 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="payments" style="font-variation-settings: 'FILL' 1;">payments</span>
+<span class="font-medium">Income</span>
+</a>
+<!-- Expenses -->
+<a class="flex items-center gap-3 px-3 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:text-indigo-500 hover:bg-white/50 dark:hover:bg-slate-800 transition-all duration-200 group" href="#">
+<span class="material-symbols-outlined group-active:scale-90" data-icon="receipt_long">receipt_long</span>
+<span class="font-medium">Expenses</span>
+</a>
+<!-- Reports -->
+<a class="flex items-center gap-3 px-3 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:text-indigo-500 hover:bg-white/50 dark:hover:bg-slate-800 transition-all duration-200 group" href="#">
+<span class="material-symbols-outlined group-active:scale-90" data-icon="bar_chart">bar_chart</span>
+<span class="font-medium">Reports</span>
+</a>
+<!-- Settings -->
+<a class="flex items-center gap-3 px-3 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:text-indigo-500 hover:bg-white/50 dark:hover:bg-slate-800 transition-all duration-200 group" href="#">
+<span class="material-symbols-outlined group-active:scale-90" data-icon="settings">settings</span>
+<span class="font-medium">Settings</span>
+</a>
+</nav>
+<div class="mt-auto px-2">
+<button class="w-full py-4 bg-primary-container text-on-primary-container rounded-xl font-bold flex items-center justify-center gap-2 shadow-xl shadow-indigo-200 transition-transform active:scale-95">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+                Quick Add
+            </button>
+</div>
+</aside>
+<!-- TopNavBar Shell -->
+<header class="fixed top-0 right-0 w-[calc(100%-16rem)] h-16 bg-white/80 dark:bg-slate-950/80 backdrop-blur-md flex items-center justify-between px-8 z-40">
+<div class="flex items-center gap-4 flex-1">
+<div class="relative w-full max-w-md">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" data-icon="search">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-surface-container-low border-none rounded-full text-sm focus:ring-2 focus:ring-primary/20" placeholder="Search transactions..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<button class="text-slate-500 hover:text-indigo-600 transition-colors">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<div class="flex items-center gap-3 pl-4 border-l border-slate-100">
+<div class="text-right">
+<p class="text-sm font-bold text-slate-900 leading-tight">Next Skills Academy</p>
+<p class="text-xs text-slate-500">Finance Hub</p>
+</div>
+<img alt="User Profile" class="w-10 h-10 rounded-full object-cover ring-2 ring-indigo-50" data-alt="professional portrait of a middle-aged male executive in a sleek modern office setting with soft natural lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB-0ngeipN3InTmpMbOKXUnZyJgG_rnwsjJn2jZlaNIemlT3cMx5V7jLhilwg54Uebkz9fOBglZMvnsT_dTB3g2yKE-qIeHlZNcP8DDQ3Qz_yzojSAQPu46jQz5ysf-OH3Z6MPBOCxO1ubrIK1n1dlNUSGLksY_jDPzRgKHST_LvrG9yjsLNJLEIP_C6xvHehj8y1pbnXHh7SBOGd9nQTIvYnmUct_QbRs9Z2EjJ8X_Mg4MVG6xIApM01c7fewExSTk_0240MBaZg"/>
+</div>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="ml-64 pt-24 pb-12 px-12 max-w-7xl mx-auto">
+<!-- Breadcrumbs & Heading -->
+<div class="mb-10">
+<div class="flex items-center gap-2 text-sm text-slate-400 mb-2">
+<span>Dashboard</span>
+<span class="material-symbols-outlined text-xs" data-icon="chevron_right">chevron_right</span>
+<span class="text-indigo-600 font-medium">Income Entry</span>
+</div>
+<h2 class="text-3xl font-extrabold text-slate-900 tracking-tight">New Income Entry</h2>
+<p class="text-slate-500 mt-1">Record a new revenue stream for the Fiscal Year 2024.</p>
+</div>
+<div class="grid grid-cols-12 gap-8">
+<!-- Form Section -->
+<div class="col-span-8">
+<div class="bg-surface-container-lowest rounded-xl p-8 shadow-xl shadow-slate-900/5">
+<form class="space-y-8">
+<!-- Row 1: Amount and Date -->
+<div class="grid grid-cols-2 gap-6">
+<div>
+<label class="block text-sm font-semibold text-on-surface-variant mb-2 px-1">Amount (USD)</label>
+<div class="relative">
+<span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-medium">$</span>
+<input class="w-full pl-10 pr-4 py-4 bg-surface-container-low border-none rounded-xl focus:ring-2 focus:ring-primary text-lg font-bold text-indigo-900" placeholder="0.00" step="0.01" type="number"/>
+</div>
+</div>
+<div>
+<label class="block text-sm font-semibold text-on-surface-variant mb-2 px-1">Transaction Date</label>
+<div class="relative">
+<span class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
+<input class="w-full pl-4 pr-12 py-4 bg-surface-container-low border-none rounded-xl focus:ring-2 focus:ring-primary text-on-surface" type="date"/>
+</div>
+</div>
+</div>
+<!-- Row 2: Category and Received From -->
+<div class="grid grid-cols-2 gap-6">
+<div>
+<label class="block text-sm font-semibold text-on-surface-variant mb-2 px-1">Source / Category</label>
+<select class="w-full px-4 py-4 bg-surface-container-low border-none rounded-xl focus:ring-2 focus:ring-primary text-on-surface appearance-none">
+<option>Course Fees</option>
+<option>Corporate Training</option>
+<option>Consulting</option>
+<option>Sponsorships</option>
+<option>Merchandise</option>
+</select>
+</div>
+<div>
+<label class="block text-sm font-semibold text-on-surface-variant mb-2 px-1">Received From</label>
+<input class="w-full px-4 py-4 bg-surface-container-low border-none rounded-xl focus:ring-2 focus:ring-primary text-on-surface" placeholder="Company or Individual Name" type="text"/>
+</div>
+</div>
+<!-- Row 3: Secondary Details -->
+<div>
+<label class="block text-sm font-semibold text-on-surface-variant mb-2 px-1">Payer Details (Optional)</label>
+<input class="w-full px-4 py-4 bg-surface-container-low border-none rounded-xl focus:ring-2 focus:ring-primary text-on-surface" placeholder="Tax ID, Contact Email, or Address" type="text"/>
+</div>
+<!-- Row 4: Description -->
+<div>
+<label class="block text-sm font-semibold text-on-surface-variant mb-2 px-1">Description / Project Details</label>
+<textarea class="w-full px-4 py-4 bg-surface-container-low border-none rounded-xl focus:ring-2 focus:ring-primary text-on-surface" placeholder="Detailed breakdown of the income source..." rows="4"></textarea>
+</div>
+<!-- Row 5: Admin & Metadata -->
+<div class="pt-6 border-t border-slate-100 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+</div>
+<div>
+<label class="block text-[10px] uppercase tracking-wider font-bold text-slate-400">Entry By</label>
+<p class="text-sm font-semibold text-slate-700">Admin: Sarah Mitchell</p>
+</div>
+</div>
+<div class="flex gap-4">
+<button class="px-8 py-4 text-slate-500 font-bold hover:text-slate-700 transition-colors" type="button">Discard</button>
+<button class="px-10 py-4 bg-gradient-to-r from-primary to-primary-container text-white font-bold rounded-xl shadow-lg shadow-indigo-200 active:scale-95 transition-all" type="submit">Submit Income</button>
+</div>
+</div>
+</form>
+</div>
+</div>
+<!-- Contextual Sidebar / Insights -->
+<div class="col-span-4 space-y-6">
+<!-- Status Card -->
+<div class="bg-surface-container-low rounded-xl p-6 border border-white/50">
+<h3 class="font-headline font-bold text-indigo-900 mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-indigo-600" data-icon="analytics">analytics</span>
+                        Monthly Target
+                    </h3>
+<div class="space-y-4">
+<div class="flex justify-between text-sm">
+<span class="text-slate-500">Collected</span>
+<span class="font-bold text-slate-900">$42,500.00</span>
+</div>
+<div class="w-full h-3 bg-white rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[65%] rounded-full"></div>
+</div>
+<p class="text-xs text-slate-400 italic">65% of your $65,000.00 goal achieved.</p>
+</div>
+</div>
+<!-- Recent Entry Card -->
+<div class="bg-surface-container-lowest rounded-xl p-6 shadow-xl shadow-slate-900/5">
+<h3 class="font-headline font-bold text-slate-900 mb-4">Last Entry</h3>
+<div class="flex items-start gap-4">
+<div class="p-3 bg-tertiary-container/10 rounded-xl text-on-tertiary-container">
+<span class="material-symbols-outlined" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div>
+<p class="text-sm font-bold text-slate-900">$1,250.00</p>
+<p class="text-xs text-slate-500">Corporate Training - TechCorp</p>
+<p class="text-[10px] text-slate-400 mt-1">2 hours ago</p>
+</div>
+</div>
+</div>
+<!-- Tips / Guidance -->
+<div class="p-6 bg-indigo-600 rounded-xl text-white relative overflow-hidden group">
+<div class="relative z-10">
+<h3 class="font-bold mb-2">Pro Tip</h3>
+<p class="text-indigo-100 text-sm leading-relaxed">Ensure all consulting fees include the Project ID in the description for automated reconciliation.</p>
+</div>
+<span class="material-symbols-outlined absolute -right-4 -bottom-4 text-white/10 text-8xl rotate-12 transition-transform group-hover:scale-110" data-icon="lightbulb">lightbulb</span>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer Shell -->
+<footer class="w-full py-8 mt-auto flex flex-col md:flex-row justify-between items-center px-12 border-t border-slate-100 dark:border-slate-800 ml-64 max-w-[calc(100%-16rem)]">
+<p class="text-slate-400 text-sm font-medium">© 2024 Next Skills Academy. The Fiscal Architect.</p>
+<div class="flex items-center gap-8 mt-4 md:mt-0">
+<a class="text-slate-400 hover:text-indigo-600 text-sm transition-colors" href="#">Privacy Policy</a>
+<a class="text-slate-400 hover:text-indigo-600 text-sm transition-colors" href="#">Terms of Service</a>
+<a class="text-slate-400 hover:text-indigo-600 text-sm transition-colors" href="#">Support</a>
+</div>
+</footer>
+</body></html>

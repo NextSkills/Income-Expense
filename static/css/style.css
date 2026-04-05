@@ -1,0 +1,98 @@
+.glass-effect {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+.glass-panel {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+.material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+h1, h2, h3, h4, .font-headline {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+/* Smooth page transitions */
+.page-enter {
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 6px;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background: #c7c4d8;
+    border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #777587;
+}
+
+/* Category card selection */
+.category-card {
+    transition: all 0.2s ease;
+}
+.category-card:hover {
+    transform: translateY(-2px);
+}
+.category-card.selected {
+    border-color: #4f46e5 !important;
+    background: rgba(79, 70, 229, 0.08) !important;
+}
+.category-card.selected .cat-icon {
+    color: #3525cd !important;
+}
+.category-card.selected .cat-label {
+    color: #3525cd !important;
+    font-weight: 700 !important;
+}
+
+/* Flash messages */
+.flash-message {
+    animation: slideDown 0.4s ease-out, fadeOut 0.4s ease-in 3s forwards;
+}
+@keyframes slideDown {
+    from { transform: translateY(-100%); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+/* Nav link active indicator animation */
+.nav-active-indicator {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Input focus glow */
+input:focus, select:focus, textarea:focus {
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+/* Button press effect */
+.btn-press {
+    transition: all 0.15s ease;
+}
+.btn-press:active {
+    transform: scale(0.96);
+}
