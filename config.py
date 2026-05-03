@@ -10,3 +10,5 @@ class Config:
     WTF_CSRF_ENABLED = True
     SESSION_TYPE = 'sqlalchemy'
     SESSION_USE_SIGNER = True
+    UPLOAD_FOLDER = os.path.join('static', 'uploads', 'receipts')
+    MAX_CONTENT_LENGTH = 5 * 1024 * 1024  # 5MB limit

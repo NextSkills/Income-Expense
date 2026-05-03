@@ -1,0 +1,73 @@
+{% extends "app_shell.html" %}
+{% set active_page = 'add_category' %}
+{% block title %}Add Category | Next Skills Academy{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto">
+    <div class="mb-10 text-center">
+        <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight">Add Transaction Category</h2>
+        <p class="text-on-surface-variant font-medium mt-2">Create custom categories for expenses or income</p>
+    </div>
+
+    <!-- Flash messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          {% if category == 'success' %}
+          <div class="mb-6 p-4 rounded-lg bg-green-50 text-green-700 text-sm font-medium border border-green-200 flex items-center gap-3">
+              <span class="material-symbols-outlined">check_circle</span>
+              {{ message }}
+          </div>
+          {% else %}
+          <div class="mb-6 p-4 rounded-lg bg-red-50 text-red-700 text-sm font-medium border border-red-200 flex items-center gap-3">
+              <span class="material-symbols-outlined">error</span>
+              {{ message }}
+          </div>
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <div class="bg-white rounded-2xl shadow-xl shadow-slate-200/40 border border-slate-100 p-8">
+        <form method="POST" action="{{ url_for('add_category') }}" class="space-y-6">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+            <div>
+                <label for="name" class="block font-label text-sm font-semibold text-slate-600 mb-2">Category Name</label>
+                <div class="relative">
+                    <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">label</span>
+                    <input type="text" id="name" name="name" required placeholder="e.g. Server Hosting"
+                           class="w-full pl-12 pr-4 py-3 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all">
+                </div>
+            </div>
+
+            <div>
+                <label for="type" class="block font-label text-sm font-semibold text-slate-600 mb-2">Category Type</label>
+                <div class="relative">
+                    <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">compare_arrows</span>
+                    <select id="type" name="type" required class="w-full pl-12 pr-4 py-3 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all appearance-none">
+                        <option value="expense">Expense</option>
+                        <option value="income">Income</option>
+                    </select>
+                </div>
+            </div>
+
+            <div>
+                <label for="icon" class="block font-label text-sm font-semibold text-slate-600 mb-2">Icon Name</label>
+                <div class="relative">
+                    <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">interests</span>
+                    <input type="text" id="icon" name="icon" placeholder="e.g. inventory_2 or cloud"
+                           class="w-full pl-12 pr-4 py-3 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all">
+                </div>
+                <p class="text-[10px] text-slate-500 mt-2">Enter a valid <a href="https://fonts.google.com/icons" target="_blank" class="text-indigo-600 hover:underline">Material Symbols</a> icon string. Defaults to 'category' if left blank.</p>
+            </div>
+
+            <div class="pt-6">
+                <button type="submit" class="w-full py-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold text-lg shadow-lg shadow-indigo-200 transition-transform active:scale-[0.98]">
+                    Create Category
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

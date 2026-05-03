@@ -1,30 +1,32 @@
 {% extends "base.html" %}
-{% block title %}Login | Next Skills Academy - Fiscal Architect{% endblock %}
+{% block title %}Login | Next Skills Academy{% endblock %}
 
 {% block body %}
 <main class="flex-grow flex items-center justify-center p-6 relative overflow-hidden min-h-screen">
     <!-- Abstract Background -->
     <div class="absolute top-[-10%] left-[-5%] w-[40%] h-[40%] rounded-full bg-primary/5 blur-[120px]"></div>
-    <div class="absolute bottom-[-10%] right-[-5%] w-[40%] h-[40%] rounded-full bg-secondary-container/20 blur-[100px]"></div>
+    <div class="absolute bottom-[-10%] right-[-5%] w-[40%] h-[40%] rounded-full bg-secondary-container/20 blur-[100px]">
+    </div>
 
     <div class="w-full max-w-[440px] relative z-10 page-enter">
         <!-- Branding -->
         <div class="flex flex-col items-center mb-10">
-            <div class="w-20 h-20 mb-6 bg-surface-container-lowest rounded-xl flex items-center justify-center shadow-xl shadow-primary/5 p-3">
-                <span class="material-symbols-outlined text-primary text-4xl" style="font-variation-settings: 'FILL' 1;">architecture</span>
+            <div
+                class="w-20 h-20 mb-6 bg-surface-container-lowest rounded-xl flex items-center justify-center shadow-xl shadow-primary/5 p-3">
+                <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Next Skills Academy Logo" class="w-full h-full object-contain">
             </div>
             <h1 class="font-headline text-3xl font-extrabold tracking-tight text-on-surface text-center">
-                Fiscal Architect
+                Next Skills Academy
             </h1>
             <p class="text-on-surface-variant font-medium mt-2 tracking-wide uppercase text-xs">
-                Operational Excellence
+                Empower, Explore and Excel
             </p>
         </div>
 
         <!-- Login Card -->
         <div class="bg-surface-container-lowest p-8 md:p-10 rounded-xl shadow-2xl shadow-on-surface/5">
             <form class="space-y-6" method="POST" action="{{ url_for('login') }}">
-                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
 
                 <!-- Email -->
                 <div class="space-y-2">
@@ -32,23 +34,31 @@
                         Username or Email
                     </label>
                     <div class="relative">
-                        <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline">person</span>
-                        <input class="w-full pl-12 pr-4 py-4 bg-surface-container-low border-none rounded-lg focus:ring-2 focus:ring-primary focus:bg-surface-container-lowest transition-all placeholder:text-outline"
-                               id="email" name="email" placeholder="architect@nextskills.com" type="text" required/>
+                        <span
+                            class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline">person</span>
+                        <input
+                            class="w-full pl-12 pr-4 py-4 bg-surface-container-low border-none rounded-lg focus:ring-2 focus:ring-primary focus:bg-surface-container-lowest transition-all placeholder:text-outline"
+                            id="email" name="email" placeholder="architect@nextskills.com" type="text" required />
                     </div>
                 </div>
 
                 <!-- Password -->
                 <div class="space-y-2">
                     <div class="flex justify-between items-center px-1">
-                        <label class="block font-label text-sm font-semibold text-on-surface-variant" for="password">Password</label>
-                        <a class="text-xs font-semibold text-primary hover:text-primary-container transition-colors" href="#">Forgot password?</a>
+                        <label class="block font-label text-sm font-semibold text-on-surface-variant"
+                            for="password">Password</label>
+                        <a class="text-xs font-semibold text-primary hover:text-primary-container transition-colors"
+                            href="#">Forgot password?</a>
                     </div>
                     <div class="relative">
-                        <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline">lock</span>
-                        <input class="w-full pl-12 pr-12 py-4 bg-surface-container-low border-none rounded-lg focus:ring-2 focus:ring-primary focus:bg-surface-container-lowest transition-all placeholder:text-outline"
-                               id="password" name="password" placeholder="••••••••" type="password" required/>
-                        <button class="absolute right-4 top-1/2 -translate-y-1/2 text-outline hover:text-on-surface transition-colors" type="button" onclick="togglePassword()">
+                        <span
+                            class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline">lock</span>
+                        <input
+                            class="w-full pl-12 pr-12 py-4 bg-surface-container-low border-none rounded-lg focus:ring-2 focus:ring-primary focus:bg-surface-container-lowest transition-all placeholder:text-outline"
+                            id="password" name="password" placeholder="••••••••" type="password" required />
+                        <button
+                            class="absolute right-4 top-1/2 -translate-y-1/2 text-outline hover:text-on-surface transition-colors"
+                            type="button" onclick="togglePassword()">
                             <span class="material-symbols-outlined" id="vis-icon">visibility</span>
                         </button>
                     </div>
@@ -56,12 +66,16 @@
 
                 <!-- Remember -->
                 <div class="flex items-center space-x-2 px-1">
-                    <input class="w-4 h-4 rounded border-outline-variant text-primary focus:ring-primary" id="remember" name="remember" type="checkbox"/>
-                    <label class="text-sm text-on-surface-variant font-medium" for="remember">Keep me logged in for 30 days</label>
+                    <input class="w-4 h-4 rounded border-outline-variant text-primary focus:ring-primary" id="remember"
+                        name="remember" type="checkbox" />
+                    <label class="text-sm text-on-surface-variant font-medium" for="remember">Keep me logged in for 30
+                        days</label>
                 </div>
 
                 <!-- Submit -->
-                <button class="w-full py-4 rounded-full bg-gradient-to-r from-primary to-primary-container text-on-primary font-headline font-bold text-lg shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center space-x-2 btn-press" type="submit">
+                <button
+                    class="w-full py-4 rounded-full bg-gradient-to-r from-primary to-primary-container text-on-primary font-headline font-bold text-lg shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center space-x-2 btn-press"
+                    type="submit">
                     <span>Login</span>
                     <span class="material-symbols-outlined text-lg">arrow_forward</span>
                 </button>
@@ -70,7 +84,8 @@
             <div class="mt-8 pt-8 border-t border-surface-container text-center">
                 <p class="text-on-surface-variant text-sm">
                     Don't have an account?
-                    <a class="text-primary font-bold hover:underline underline-offset-4" href="#">Contact Administrator</a>
+                    <a class="text-primary font-bold hover:underline underline-offset-4" href="#">Contact
+                        Administrator</a>
                 </p>
             </div>
         </div>
@@ -81,26 +96,28 @@
     </div>
 </main>
 
-<footer class="w-full py-6 mt-auto flex flex-col md:flex-row justify-between items-center px-8 bg-slate-50 border-t border-slate-100">
-    <div class="text-slate-400 font-label text-xs tracking-wide">© 2024 Next Skills Academy. The Fiscal Architect.</div>
+<footer
+    class="w-full py-6 mt-auto flex flex-col md:flex-row justify-between items-center px-8 bg-slate-50 border-t border-slate-100">
+    <div class="text-slate-400 font-label text-xs tracking-wide">© 2024 Next Skills Academy.</div>
     <div class="flex space-x-6 mt-4 md:mt-0">
         <a class="text-slate-400 hover:text-slate-600 text-xs font-medium transition-colors" href="#">Privacy Policy</a>
-        <a class="text-slate-400 hover:text-slate-600 text-xs font-medium transition-colors" href="#">Terms of Service</a>
+        <a class="text-slate-400 hover:text-slate-600 text-xs font-medium transition-colors" href="#">Terms of
+            Service</a>
         <a class="text-slate-400 hover:text-slate-600 text-xs font-medium transition-colors" href="#">Support</a>
     </div>
 </footer>
 
 <script>
-function togglePassword() {
-    const inp = document.getElementById('password');
-    const icon = document.getElementById('vis-icon');
-    if (inp.type === 'password') {
-        inp.type = 'text';
-        icon.textContent = 'visibility_off';
-    } else {
-        inp.type = 'password';
-        icon.textContent = 'visibility';
+    function togglePassword() {
+        const inp = document.getElementById('password');
+        const icon = document.getElementById('vis-icon');
+        if (inp.type === 'password') {
+            inp.type = 'text';
+            icon.textContent = 'visibility_off';
+        } else {
+            inp.type = 'password';
+            icon.textContent = 'visibility';
+        }
     }
-}
 </script>
 {% endblock %}

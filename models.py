@@ -50,5 +50,6 @@ class Transaction(db.Model):
     description = db.Column(db.Text, default='')
     entity_name = db.Column(db.String(200), default='')
     entity_contact = db.Column(db.String(200), default='')
+    receipt_path = db.Column(db.String(500), nullable=True)
     admin_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)

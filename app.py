@@ -1,4 +1,6 @@
 from flask import Flask, render_template, redirect, url_for, flash, request
+import os
+from werkzeug.utils import secure_filename
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from flask_wtf.csrf import CSRFProtect
 from flask_session import Session
@@ -43,7 +45,7 @@ class SecureAdminIndexView(AdminIndexView):
             return redirect(url_for('login', next=request.url))
         return redirect(url_for('dashboard'))
 
-admin = Admin(app, name='Fiscal Architect DB', index_view=SecureAdminIndexView())
+admin = Admin(app, name='Next Skills Academy DB', index_view=SecureAdminIndexView())
 admin.add_view(SecureModelView(User, db.session))
 admin.add_view(SecureModelView(Transaction, db.session))
 admin.add_view(SecureModelView(Category, db.session))
@@ -130,7 +132,7 @@ def add_income():
         db.session.add(txn)
         db.session.commit()
         flash('Income entry submitted successfully!', 'success')
-        return redirect(url_for('dashboard'))
+        return redirect(url_for('add_income'))
 
     last_entry = Transaction.query.filter_by(type='income').order_by(Transaction.created_at.desc()).first()
     total_collected = db.session.query(db.func.coalesce(db.func.sum(Transaction.amount), 0)).filter(
@@ -139,12 +141,16 @@ def add_income():
     goal = 65000.0
     goal_pct = min(int((total_collected / goal) * 100), 100) if goal > 0 else 0
 
+    # All income transactions for the display table
+    income_transactions = Transaction.query.filter_by(type='income').order_by(Transaction.date.desc()).all()
+
     return render_template('add_income.html',
         categories=categories,
         last_entry=last_entry,
         total_collected=total_collected,
         goal=goal,
-        goal_pct=goal_pct
+        goal_pct=goal_pct,
+        income_transactions=income_transactions
     )
 
 
@@ -152,6 +158,19 @@ def add_income():
 @login_required
 def add_expense():
     if request.method == 'POST':
+        # Handle File Upload
+        receipt_path = None
+        if 'receipt' in request.files:
+            file = request.files['receipt']
+            if file and file.filename != '':
+                # Ensure upload directory exists
+                os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+                filename = secure_filename(f"{datetime.now().strftime('%Y%m%d%H%M%S')}_{file.filename}")
+                file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                file.save(file_path)
+                # Store relative path for web access
+                receipt_path = os.path.join('uploads', 'receipts', filename).replace('\\', '/')
+
         txn = Transaction(
             type='expense',
             amount=float(request.form.get('amount', 0)),
@@ -160,15 +179,367 @@ def add_expense():
             entity_name=request.form.get('paid_to', ''),
             entity_contact=request.form.get('contact_details', ''),
             description=request.form.get('description', ''),
+            receipt_path=receipt_path,
             admin_id=current_user.id
         )
         db.session.add(txn)
         db.session.commit()
         flash('Expense entry submitted successfully!', 'success')
+        return redirect(url_for('add_expense'))
+
+    categories = Category.query.filter_by(type='expense').all()
+    users = User.query.all()
+
+    # All expense transactions for the display table
+    expense_transactions = Transaction.query.filter_by(type='expense').order_by(Transaction.date.desc()).all()
+    total_expense_amount = db.session.query(db.func.coalesce(db.func.sum(Transaction.amount), 0)).filter(
+        Transaction.type == 'expense'
+    ).scalar()
+
+    return render_template('add_expense.html',
+        users=users,
+        categories=categories,
+        expense_transactions=expense_transactions,
+        total_expense_amount=total_expense_amount
+    )
+
+
+@app.route('/expense/<int:txn_id>/edit', methods=['POST'])
+@login_required
+def edit_expense(txn_id):
+    txn = Transaction.query.get_or_404(txn_id)
+    if txn.type != 'expense':
+        flash('Invalid transaction type.', 'error')
+        return redirect(url_for('add_expense'))
+
+    txn.amount = float(request.form.get('amount', txn.amount))
+    txn.category_name = request.form.get('category', txn.category_name)
+    txn.entity_name = request.form.get('entity_name', txn.entity_name)
+    txn.entity_contact = request.form.get('entity_contact', txn.entity_contact)
+    txn.description = request.form.get('description', txn.description)
+
+    date_str = request.form.get('date', '')
+    if date_str:
+        try:
+            txn.date = datetime.strptime(date_str, '%Y-%m-%d').date()
+        except ValueError:
+            pass
+
+    # Handle receipt replacement
+    if 'receipt' in request.files:
+        file = request.files['receipt']
+        if file and file.filename != '':
+            if txn.receipt_path:
+                old_path = os.path.join('static', txn.receipt_path)
+                if os.path.exists(old_path):
+                    os.remove(old_path)
+            os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+            filename = secure_filename(f"{datetime.now().strftime('%Y%m%d%H%M%S')}_{file.filename}")
+            file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            file.save(file_path)
+            txn.receipt_path = os.path.join('uploads', 'receipts', filename).replace('\\', '/')
+
+    db.session.commit()
+    flash(f'Expense #{txn.id} updated successfully.', 'success')
+    return redirect(url_for('add_expense'))
+
+
+@app.route('/expense/<int:txn_id>/delete', methods=['POST'])
+@login_required
+def delete_expense(txn_id):
+    txn = Transaction.query.get_or_404(txn_id)
+    if txn.type != 'expense':
+        flash('Invalid transaction type.', 'error')
+        return redirect(url_for('add_expense'))
+
+    if txn.receipt_path:
+        file_path = os.path.join('static', txn.receipt_path)
+        if os.path.exists(file_path):
+            os.remove(file_path)
+
+    db.session.delete(txn)
+    db.session.commit()
+    flash('Expense deleted successfully.', 'success')
+    return redirect(url_for('add_expense'))
+
+
+@app.route('/income/<int:txn_id>/edit', methods=['POST'])
+@login_required
+def edit_income(txn_id):
+    txn = Transaction.query.get_or_404(txn_id)
+    if txn.type != 'income':
+        flash('Invalid transaction type.', 'error')
+        return redirect(url_for('add_income'))
+
+    txn.amount = float(request.form.get('amount', txn.amount))
+    txn.category_name = request.form.get('category', txn.category_name)
+    txn.entity_name = request.form.get('entity_name', txn.entity_name)
+    txn.entity_contact = request.form.get('entity_contact', txn.entity_contact)
+    txn.description = request.form.get('description', txn.description)
+
+    date_str = request.form.get('date', '')
+    if date_str:
+        try:
+            txn.date = datetime.strptime(date_str, '%Y-%m-%d').date()
+        except ValueError:
+            pass
+
+    db.session.commit()
+    flash(f'Income #{txn.id} updated successfully.', 'success')
+    return redirect(url_for('add_income'))
+
+
+@app.route('/income/<int:txn_id>/delete', methods=['POST'])
+@login_required
+def delete_income(txn_id):
+    txn = Transaction.query.get_or_404(txn_id)
+    if txn.type != 'income':
+        flash('Invalid transaction type.', 'error')
+        return redirect(url_for('add_income'))
+
+    db.session.delete(txn)
+    db.session.commit()
+    flash('Income deleted successfully.', 'success')
+    return redirect(url_for('add_income'))
+
+
+@app.route('/admin/transactions')
+@login_required
+def manage_transactions():
+    if current_user.role != 'Finance Admin':
+        flash('You do not have permission to access that page.', 'error')
         return redirect(url_for('dashboard'))
 
-    users = User.query.all()
-    return render_template('add_expense.html', users=users)
+    # Filters
+    filter_type = request.args.get('type', 'all')
+    filter_category = request.args.get('category', 'all')
+    search_query = request.args.get('q', '').strip()
+
+    query = Transaction.query
+
+    if filter_type != 'all':
+        query = query.filter(Transaction.type == filter_type)
+    if filter_category != 'all':
+        query = query.filter(Transaction.category_name == filter_category)
+    if search_query:
+        query = query.filter(
+            db.or_(
+                Transaction.description.ilike(f'%{search_query}%'),
+                Transaction.entity_name.ilike(f'%{search_query}%'),
+                Transaction.category_name.ilike(f'%{search_query}%')
+            )
+        )
+
+    transactions = query.order_by(Transaction.date.desc()).all()
+
+    # Get all unique categories for filter dropdown
+    all_categories = db.session.query(Transaction.category_name).distinct().all()
+    category_names = sorted([c[0] for c in all_categories if c[0]])
+
+    # Stats
+    total_income = sum(t.amount for t in transactions if t.type == 'income')
+    total_expense = sum(t.amount for t in transactions if t.type == 'expense')
+
+    # All categories for edit modal
+    income_categories = Category.query.filter_by(type='income').all()
+    expense_categories = Category.query.filter_by(type='expense').all()
+
+    return render_template('manage_transactions.html',
+        transactions=transactions,
+        filter_type=filter_type,
+        filter_category=filter_category,
+        search_query=search_query,
+        category_names=category_names,
+        total_income=total_income,
+        total_expense=total_expense,
+        income_categories=income_categories,
+        expense_categories=expense_categories
+    )
+
+
+@app.route('/admin/transactions/<int:txn_id>/edit', methods=['POST'])
+@login_required
+def edit_transaction(txn_id):
+    if current_user.role != 'Finance Admin':
+        flash('You do not have permission to perform that action.', 'error')
+        return redirect(url_for('dashboard'))
+
+    txn = Transaction.query.get_or_404(txn_id)
+
+    txn.type = request.form.get('type', txn.type)
+    txn.amount = float(request.form.get('amount', txn.amount))
+    txn.category_name = request.form.get('category', txn.category_name)
+    txn.entity_name = request.form.get('entity_name', txn.entity_name)
+    txn.entity_contact = request.form.get('entity_contact', txn.entity_contact)
+    txn.description = request.form.get('description', txn.description)
+
+    date_str = request.form.get('date', '')
+    if date_str:
+        try:
+            txn.date = datetime.strptime(date_str, '%Y-%m-%d').date()
+        except ValueError:
+            pass
+
+    # Handle receipt replacement
+    if 'receipt' in request.files:
+        file = request.files['receipt']
+        if file and file.filename != '':
+            # Delete old receipt if exists
+            if txn.receipt_path:
+                old_path = os.path.join('static', txn.receipt_path)
+                if os.path.exists(old_path):
+                    os.remove(old_path)
+
+            os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+            filename = secure_filename(f"{datetime.now().strftime('%Y%m%d%H%M%S')}_{file.filename}")
+            file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            file.save(file_path)
+            txn.receipt_path = os.path.join('uploads', 'receipts', filename).replace('\\', '/')
+
+    db.session.commit()
+    flash(f'Transaction #{txn.id} updated successfully.', 'success')
+    return redirect(url_for('manage_transactions'))
+
+
+@app.route('/admin/transactions/<int:txn_id>/delete', methods=['POST'])
+@login_required
+def delete_transaction(txn_id):
+    if current_user.role != 'Finance Admin':
+        flash('You do not have permission to perform that action.', 'error')
+        return redirect(url_for('dashboard'))
+
+    txn = Transaction.query.get_or_404(txn_id)
+
+    # Delete receipt file if exists
+    if txn.receipt_path:
+        file_path = os.path.join('static', txn.receipt_path)
+        if os.path.exists(file_path):
+            os.remove(file_path)
+
+    db.session.delete(txn)
+    db.session.commit()
+    flash(f'Transaction deleted successfully.', 'success')
+    return redirect(url_for('manage_transactions'))
+
+
+@app.route('/add-admin', methods=['GET', 'POST'])
+@login_required
+def add_admin():
+    if current_user.role != 'Finance Admin':
+        flash('You do not have permission to access that page.', 'error')
+        return redirect(url_for('dashboard'))
+
+    if request.method == 'POST':
+        full_name = request.form.get('full_name', '').strip()
+        email = request.form.get('email', '').strip()
+        username = request.form.get('username', '').strip()
+        password = request.form.get('password', '').strip()
+        role = request.form.get('role', 'Administrator')
+
+        if not full_name or not email or not username or not password:
+            flash('All fields are required.', 'error')
+            return redirect(url_for('add_admin'))
+
+        # Check for existing email/username
+        existing_user = User.query.filter(
+            (User.email == email) | (User.username == username)
+        ).first()
+
+        if existing_user:
+            flash('That email or username is already in use.', 'error')
+            return redirect(url_for('add_admin'))
+
+        new_user = User(
+            full_name=full_name,
+            email=email,
+            username=username,
+            role=role
+        )
+        new_user.set_password(password)
+
+        db.session.add(new_user)
+        db.session.commit()
+        
+        flash(f'Administrator ({full_name}) created successfully.', 'success')
+        return redirect(url_for('add_admin'))
+
+    return render_template('add_admin.html')
+
+
+@app.route('/add-category', methods=['GET', 'POST'])
+@login_required
+def add_category():
+    if current_user.role != 'Finance Admin':
+        flash('You do not have permission to access that page.', 'error')
+        return redirect(url_for('dashboard'))
+
+    if request.method == 'POST':
+        name = request.form.get('name', '').strip()
+        type_val = request.form.get('type', 'expense').strip()
+        icon = request.form.get('icon', '').strip()
+
+        if not name or not type_val:
+            flash('Category Name and Type are required.', 'error')
+            return redirect(url_for('add_category'))
+            
+        if not icon:
+            icon = 'category'
+
+        # Check if category already exists
+        existing_cat = Category.query.filter_by(name=name, type=type_val).first()
+        if existing_cat:
+            flash(f'The {type_val} category "{name}" already exists.', 'error')
+            return redirect(url_for('add_category'))
+
+        new_cat = Category(
+            name=name,
+            type=type_val,
+            icon=icon
+        )
+
+        db.session.add(new_cat)
+        db.session.commit()
+        
+        flash(f'Category "{name}" added successfully.', 'success')
+        return redirect(url_for('add_category'))
+
+    return render_template('add_category.html')
+
+
+@app.route('/settings', methods=['GET', 'POST'])
+@login_required
+def settings():
+    if request.method == 'POST':
+        full_name = request.form.get('full_name', '').strip()
+        email = request.form.get('email', '').strip()
+        username = request.form.get('username', '').strip()
+        password = request.form.get('password', '').strip()
+
+        if not full_name or not email or not username:
+            flash('Full Name, Email, and Username are required.', 'error')
+            return redirect(url_for('settings'))
+
+        # Check for existing email/username taken by OTHER users
+        existing_user = User.query.filter(
+            ((User.email == email) | (User.username == username)) & (User.id != current_user.id)
+        ).first()
+
+        if existing_user:
+            flash('That email or username is already in use by another account.', 'error')
+            return redirect(url_for('settings'))
+
+        current_user.full_name = full_name
+        current_user.email = email
+        current_user.username = username
+
+        if password:
+            current_user.set_password(password)
+
+        db.session.commit()
+        flash('Your settings have been updated successfully.', 'success')
+        return redirect(url_for('settings'))
+
+    return render_template('settings.html')
 
 
 @app.route('/reports', methods=['GET'])
@@ -230,4 +601,6 @@ with app.app_context():
 
 
 if __name__ == '__main__':
+    # Ensure upload directory exists
+    os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
     app.run(debug=True, port=5000)

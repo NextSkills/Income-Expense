@@ -61,83 +61,9 @@ def seed():
         db.session.flush()
 
         # --- Transactions ---
-        transactions = [
-            Transaction(
-                type='income', amount=12400.00,
-                date=date(2024, 10, 24),
-                category_name='Course Fees',
-                description='Tuition Payment - Batch A',
-                entity_name='Batch A Students',
-                admin_id=admin.id
-            ),
-            Transaction(
-                type='expense', amount=1250.40,
-                date=date(2024, 10, 22),
-                category_name='Infrastructure',
-                description='AWS Cloud Hosting',
-                entity_name='Amazon Web Services',
-                admin_id=sarah.id
-            ),
-            Transaction(
-                type='expense', amount=3500.00,
-                date=date(2024, 10, 21),
-                category_name='Marketing',
-                description='Marketing Campaign - Q4',
-                entity_name='Digital Ads Agency',
-                admin_id=admin.id
-            ),
-            Transaction(
-                type='income', amount=8900.00,
-                date=date(2024, 10, 20),
-                category_name='Corporate Training',
-                description='Corporate Training Contract',
-                entity_name='TechCorp Industries',
-                admin_id=david.id
-            ),
-            Transaction(
-                type='income', amount=5200.00,
-                date=date(2024, 10, 18),
-                category_name='Consulting',
-                description='Strategic Consulting - FinTech Startup',
-                entity_name='PayStream Inc.',
-                admin_id=admin.id
-            ),
-            Transaction(
-                type='expense', amount=8500.00,
-                date=date(2024, 10, 15),
-                category_name='Salaries',
-                description='Instructor Salaries - October',
-                entity_name='Payroll',
-                admin_id=sarah.id
-            ),
-            Transaction(
-                type='income', amount=15800.00,
-                date=date(2024, 10, 12),
-                category_name='Course Fees',
-                description='Advanced Python Bootcamp Registration',
-                entity_name='Online Students',
-                admin_id=admin.id
-            ),
-            Transaction(
-                type='expense', amount=4200.00,
-                date=date(2024, 10, 10),
-                category_name='Rent',
-                description='Office Space Rental - October',
-                entity_name='WeWork',
-                admin_id=sarah.id
-            ),
-            Transaction(
-                type='expense', amount=970.10,
-                date=date(2024, 10, 8),
-                category_name='Utility',
-                description='Internet & Phone Services',
-                entity_name='Comcast Business',
-                admin_id=david.id
-            ),
-        ]
-        db.session.add_all(transactions)
+        # Removed dummy transactions to start from scratch.
         db.session.commit()
-
+        
         print("Database seeded successfully!")
         print(f"  Users: {User.query.count()}")
         print(f"  Categories: {Category.query.count()}")

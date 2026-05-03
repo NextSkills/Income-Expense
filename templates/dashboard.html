@@ -1,6 +1,6 @@
 {% extends "app_shell.html" %}
 {% set active_page = 'dashboard' %}
-{% block title %}Fiscal Architect - Dashboard{% endblock %}
+{% block title %}Next Skills Academy - Dashboard{% endblock %}
 
 {% block content %}
 <!-- Summary Cards -->
@@ -10,7 +10,7 @@
             <span class="material-symbols-outlined text-6xl">account_balance_wallet</span>
         </div>
         <p class="text-sm text-on-surface-variant font-medium mb-1">Total Balance</p>
-        <h2 class="text-3xl font-extrabold text-on-surface tracking-tight">${{ '{:,.2f}'.format(balance) }}</h2>
+        <h2 class="text-3xl font-extrabold text-on-surface tracking-tight">NRs.{{ '{:,.2f}'.format(balance) }}</h2>
         <div class="mt-4 flex items-center gap-1 text-emerald-600 text-xs font-bold">
             <span class="material-symbols-outlined text-sm">trending_up</span>
             <span>+2.4% from last month</span>
@@ -18,14 +18,14 @@
     </div>
     <div class="md:col-span-1 bg-surface-container-lowest p-6 rounded-xl shadow-sm relative overflow-hidden group">
         <p class="text-sm text-on-surface-variant font-medium mb-1">Total Income (MTD)</p>
-        <h2 class="text-3xl font-extrabold text-primary tracking-tight">${{ '{:,.2f}'.format(total_income) }}</h2>
+        <h2 class="text-3xl font-extrabold text-primary tracking-tight">NRs.{{ '{:,.2f}'.format(total_income) }}</h2>
         <div class="mt-4">
             <a href="{{ url_for('add_income') }}" class="text-xs font-bold px-3 py-1 bg-primary/10 text-primary rounded-full hover:bg-primary/20 transition-colors">Add Income</a>
         </div>
     </div>
     <div class="md:col-span-1 bg-surface-container-lowest p-6 rounded-xl shadow-sm relative overflow-hidden group">
         <p class="text-sm text-on-surface-variant font-medium mb-1">Total Expenses (MTD)</p>
-        <h2 class="text-3xl font-extrabold text-error tracking-tight">${{ '{:,.2f}'.format(total_expense) }}</h2>
+        <h2 class="text-3xl font-extrabold text-error tracking-tight">NRs.{{ '{:,.2f}'.format(total_expense) }}</h2>
         <div class="mt-4">
             <a href="{{ url_for('add_expense') }}" class="text-xs font-bold px-3 py-1 bg-error/10 text-error rounded-full hover:bg-error/20 transition-colors">Add Expense</a>
         </div>
@@ -33,7 +33,7 @@
     <div class="md:col-span-1 bg-indigo-600 p-6 rounded-xl shadow-lg shadow-indigo-200 relative overflow-hidden">
         <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-white/10 rounded-full blur-2xl"></div>
         <p class="text-sm text-indigo-100 font-medium mb-1">Net Savings</p>
-        <h2 class="text-3xl font-extrabold text-white tracking-tight">${{ '{:,.2f}'.format(net_savings) }}</h2>
+        <h2 class="text-3xl font-extrabold text-white tracking-tight">NRs.{{ '{:,.2f}'.format(net_savings) }}</h2>
         <div class="mt-4">
             <div class="w-full bg-white/20 rounded-full h-1.5">
                 <div class="bg-white h-1.5 rounded-full" style="width: {{ goal_pct }}%"></div>
@@ -125,7 +125,15 @@
                             </div>
                             <div>
                                 <p class="text-sm font-bold text-on-surface">{{ txn.description or txn.entity_name or 'Transaction' }}</p>
-                                <p class="text-[10px] text-slate-400">{{ txn.type|capitalize }}</p>
+                                <div class="flex items-center gap-2">
+                                    <p class="text-[10px] text-slate-400">{{ txn.type|capitalize }}</p>
+                                    {% if txn.receipt_path %}
+                                    <a href="{{ url_for('static', filename=txn.receipt_path) }}" target="_blank" class="flex items-center gap-0.5 text-indigo-600 hover:text-indigo-800 transition-colors">
+                                        <span class="material-symbols-outlined text-[10px]" style="font-variation-settings: 'FILL' 1;">attachment</span>
+                                        <span class="text-[9px] font-bold uppercase tracking-tighter">Receipt</span>
+                                    </a>
+                                    {% endif %}
+                                </div>
                             </div>
                         </div>
                     </td>
@@ -137,7 +145,7 @@
                     </td>
                     <td class="px-8 py-5 text-sm text-on-surface-variant font-medium">{{ txn.admin.full_name or txn.admin.username }}</td>
                     <td class="px-8 py-5 text-right font-bold {% if txn.type == 'income' %}text-primary{% else %}text-error{% endif %}">
-                        {% if txn.type == 'income' %}+{% else %}-{% endif %}${{ '{:,.2f}'.format(txn.amount) }}
+                        {% if txn.type == 'income' %}+{% else %}-{% endif %}NRs.{{ '{:,.2f}'.format(txn.amount) }}
                     </td>
                 </tr>
                 {% else %}
